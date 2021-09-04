@@ -25,8 +25,16 @@ function myFunction()
       // Example: http://learnerlogbooklnk.tmr.qld.gov.au/ls/click?upn=Cx15La-2BxZCiq-2BFyAcKZU7CL7-2BWL1H53FFU8yyU63Z0lej39N6dOqlPq4GP3ujlpJ5m58NxyE8GPS8MkkhiUqiiApD4ZOL-2FamQYo70rxYJO9sPkie
       //          WQuySlzsM7qvUfCNIu1UyC4MDGPbpBQqeQ9mmlUSl-2FcrcoSSK-2F-2BMustLoow-3Dim_U_HnlK5jKsOLO2iiE626ioWGaG-2BlIiNq7R-2FkbAcGwxnBke9enCs7YMZiK6YkV8kLP1U88iRrW8taUEBguTD9dQYPC-2BUz1-
       //          2BwkL-2FVeK6BU840yKhhvfNaZXilFY6MzOZTI9XE7saOC2bOJHS-2Fsy1HMuxEd9hMrnTtJl5ZtoJGi52l0qfn-2BHj3xF0gZiL-2BAy-2FvCMof8mw9AgekoYxe2azNh-2F5Fw-3D-3D
-      var regex = new RegExp(/(<a href=")(.+)(">Approve this trip)/);
-      var approvalURL = regex.exec(msg.getBody())[2];    // Index 2 gets the content of the second capture group in the regex
+      var approvalRegex = new RegExp(/(<a href=")(.+)(">Approve this trip)/);
+      var approvalRegexResult = approvalRegex.exec(msg.getBody());
+
+      if (!approvalRegexResult) // Check if we found the approval link
+      {
+        console.log("Couldn't find \"Approve this trip\" link. Maybe this email is for multiple trips?");
+        continue;
+      }
+
+      var approvalURL = approvalRegexResult[2];    // Index 2 gets the content of the second capture group in the regex
       console.log("Approval URL: " + approvalURL);
 
       // Load the approval link and get the URL the link redirects to
